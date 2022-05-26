@@ -10,7 +10,7 @@ enum ViewState { idle, busy }
 class UserModel with ChangeNotifier implements AuthBase {
   ViewState _state = ViewState.idle;
   UserRepository userRepository = locator<UserRepository>();
-  late UserInfoC _userC;
+  late UserInfoC? _userC;
 
   UserModel() {
     state = ViewState.busy;
@@ -30,8 +30,12 @@ class UserModel with ChangeNotifier implements AuthBase {
     try {
       state = ViewState.busy;
       _userC = await userRepository.currentUser();
-      notifyListeners();
-      return _userC;
+      if (_userC != null) {
+        notifyListeners();
+        return _userC;
+      } else {
+        return null;
+      }
     } catch (e) {
       print("UserModel currentUser hata: " + e.toString());
       return null;
@@ -57,6 +61,8 @@ class UserModel with ChangeNotifier implements AuthBase {
     // TODO: implement signOut
     throw UnimplementedError();
   }
+
+  UserInfoC? get userC => _userC;
 
   ViewState get state => _state;
 

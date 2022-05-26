@@ -4,6 +4,8 @@ import 'package:pigeon_pedigre/locator.dart';
 import 'package:pigeon_pedigre/viewmodel/user_model.dart';
 import 'package:provider/provider.dart';
 
+import 'app/landing_page.dart';
+
 Future<void> main() async {
   setupLocator();
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,7 +56,7 @@ class App extends StatelessWidget {
           }
 
           if (snapshot.connectionState == ConnectionState.done) {
-            return LandingPage();
+            return const LandingPage();
           }
 
           return const Scaffold(
