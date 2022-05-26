@@ -31,4 +31,14 @@ class Validator {
       return null;
     }
   }
+
+  static String? passwordControl(String? password) {
+    String pattern =
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&_*~]).{8,}$';
+    RegExp regex = RegExp(pattern);
+    if (!regex.hasMatch(password!)) {
+      return "Şifreniz yeterince güvenli değil";
+    }
+    return null;
+  }
 }

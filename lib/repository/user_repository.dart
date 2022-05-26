@@ -18,9 +18,8 @@ class UserRepository implements AuthBase {
   }
 
   @override
-  Future<UserInfoC> currentUser() {
-    // TODO: implement currentUser
-    throw UnimplementedError();
+  Future<UserInfoC>? currentUser() {
+    return null;
   }
 
   @override

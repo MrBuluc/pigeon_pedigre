@@ -27,5 +27,6 @@ class LandingPage extends StatelessWidget {
         ),
       );
     }
+    return const CircularProgressIndicator();
   }
 }

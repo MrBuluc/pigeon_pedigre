@@ -10,7 +10,7 @@ enum ViewState { idle, busy }
 class UserModel with ChangeNotifier implements AuthBase {
   ViewState _state = ViewState.idle;
   UserRepository userRepository = locator<UserRepository>();
-  late UserInfoC? _userC;
+  UserInfoC? _userC;
 
   UserModel() {
     state = ViewState.busy;
@@ -26,7 +26,7 @@ class UserModel with ChangeNotifier implements AuthBase {
   }
 
   @override
-  Future<UserInfoC?> currentUser() async {
+  Future<UserInfoC?>? currentUser() async {
     try {
       state = ViewState.busy;
       _userC = await userRepository.currentUser();
