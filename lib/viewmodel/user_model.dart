@@ -10,7 +10,13 @@ enum ViewState { idle, busy }
 class UserModel with ChangeNotifier implements AuthBase {
   ViewState _state = ViewState.idle;
   UserRepository userRepository = locator<UserRepository>();
-  //UserInfoC _userC;
+  late UserInfoC _userC;
+
+  UserModel() {
+    state = ViewState.busy;
+    currentUser();
+    state = ViewState.idle;
+  }
 
   @override
   Future<UserInfoC> createUserWithEmailandPassword(
@@ -20,9 +26,18 @@ class UserModel with ChangeNotifier implements AuthBase {
   }
 
   @override
-  Future<UserInfoC> currentUser() {
-    // TODO: implement currentUser
-    throw UnimplementedError();
+  Future<UserInfoC?> currentUser() async {
+    try {
+      state = ViewState.busy;
+      _userC = await userRepository.currentUser();
+      notifyListeners();
+      return _userC;
+    } catch (e) {
+      print("UserModel currentUser hata: " + e.toString());
+      return null;
+    } finally {
+      state = ViewState.idle;
+    }
   }
 
   @override
@@ -41,5 +56,11 @@ class UserModel with ChangeNotifier implements AuthBase {
   Future<bool> signOut() {
     // TODO: implement signOut
     throw UnimplementedError();
+  }
+
+  ViewState get state => _state;
+
+  set state(ViewState value) {
+    _state = value;
   }
 }
