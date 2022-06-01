@@ -10,7 +10,7 @@ class Validator {
     }
   }
 
-  static String? surnamemControl(String? surname) {
+  static String? surnameControl(String? surname) {
     surname = surname?.trim();
     RegExp regex = RegExp(
         "^[abcçdefgğhıijklmnoöprsştuüvyzqwxABCÇDEFGHIİJKLMNOÖPRSŞTUÜVYZQWX]+\$");

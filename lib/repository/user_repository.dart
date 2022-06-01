@@ -11,10 +11,18 @@ class UserRepository implements AuthBase {
   final FirestoreService _firestoreService = locator<FirestoreService>();
 
   @override
-  Future<UserInfoC> createUserWithEmailandPassword(
-      String name, String email, String password) {
-    // TODO: implement createUserWithEmailandPassword
-    throw UnimplementedError();
+  Future<UserInfoC?> createUserWithEmailandPassword(
+      String name, String surname, String email, String password) async {
+    UserInfoC userInfoC = await _firebaseAuthService
+        .createUserWithEmailandPassword(name, surname, email, password);
+
+    bool sonuc = await _firestoreService.setUser(userInfoC);
+
+    if (sonuc) {
+      return await _firestoreService.readUser(userInfoC.id!);
+    } else {
+      return null;
+    }
   }
 
   @override
@@ -30,6 +38,7 @@ class UserRepository implements AuthBase {
 
   @override
   Future<UserInfoC> signInWithEmailandPassword(String email, String password) {
+    //sifre = Hkcblc22@
     // TODO: implement signInWithEmailandPassword
     throw UnimplementedError();
   }

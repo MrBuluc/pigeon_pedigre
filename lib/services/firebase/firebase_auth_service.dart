@@ -7,9 +7,14 @@ class FirebaseAuthService implements AuthBase {
 
   @override
   Future<UserInfoC> createUserWithEmailandPassword(
-      String name, String email, String password) {
-    // TODO: implement createUserWithEmailandPassword
-    throw UnimplementedError();
+      String name, String surname, String email, String password) async {
+    UserCredential userCredential = await _firebaseAuth
+        .createUserWithEmailAndPassword(email: email, password: password);
+    return UserInfoC(
+        id: userCredential.user!.uid,
+        mail: email,
+        name: name,
+        surname: surname);
   }
 
   @override
