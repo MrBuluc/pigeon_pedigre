@@ -36,9 +36,8 @@ class UserRepository implements AuthBase {
   }
 
   @override
-  Future<bool> sendPasswordResetEmail(String email) {
-    // TODO: implement sendPasswordResetEmail
-    throw UnimplementedError();
+  Future<bool> sendPasswordResetEmail(String email) async {
+    return await _firebaseAuthService.sendPasswordResetEmail(email);
   }
 
   @override

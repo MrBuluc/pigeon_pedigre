@@ -37,9 +37,14 @@ class FirebaseAuthService implements AuthBase {
   }
 
   @override
-  Future<bool> sendPasswordResetEmail(String email) {
-    // TODO: implement sendPasswordResetEmail
-    throw UnimplementedError();
+  Future<bool> sendPasswordResetEmail(String email) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      print("firebase sendPasswordResetEmail hata: " + e.toString());
+      rethrow;
+    }
+    return true;
   }
 
   @override

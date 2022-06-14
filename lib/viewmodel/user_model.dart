@@ -28,7 +28,7 @@ class UserModel with ChangeNotifier implements AuthBase {
       return userInfo;
     } catch (e) {
       print("userModel hata: " + e.toString());
-      throw e;
+      rethrow;
     } finally {
       state = ViewState.idle;
     }
@@ -54,9 +54,14 @@ class UserModel with ChangeNotifier implements AuthBase {
   }
 
   @override
-  Future<bool> sendPasswordResetEmail(String email) {
-    // TODO: implement sendPasswordResetEmail
-    throw UnimplementedError();
+  Future<bool> sendPasswordResetEmail(String email) async {
+    try {
+      bool sonuc = await userRepository.sendPasswordResetEmail(email);
+      return sonuc;
+    } catch (e) {
+      print("user_model hata: " + e.toString());
+      rethrow;
+    }
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:pigeon_pedigre/ui/clipper.dart';
 import 'package:pigeon_pedigre/viewmodel/user_model.dart';
@@ -169,5 +170,67 @@ class _LoginPageState extends State<LoginPage> {
 
   Future _forgetPassword(BuildContext context) async {
     formKey.currentState?.save();
+    String? result = Validator.emailControl(email);
+    if (result == "Geçersiz email") {
+      AwesomeDialog(
+              context: context,
+              dialogType: DialogType.WARNING,
+              headerAnimationLoop: false,
+              animType: AnimType.TOPSLIDE,
+              showCloseIcon: true,
+              closeIcon: const Icon(Icons.close_fullscreen_outlined),
+              title: 'E-posta Adresini Kontrol Et',
+              desc:
+                  'E-posta alanını boş bırakamazsın ve doğru formatta e-posta '
+                  'girmen gerekiyor',
+              btnOkOnPress: () {})
+          .show();
+    } else {
+      try {
+        bool sonuc = await _userModel.sendPasswordResetEmail(email!);
+        if (sonuc) {
+          AwesomeDialog(
+            context: context,
+            animType: AnimType.LEFTSLIDE,
+            headerAnimationLoop: false,
+            dialogType: DialogType.SUCCES,
+            showCloseIcon: true,
+            title: 'E posta Kutunu Kontrol Et',
+            desc:
+                'Şifreni sıfırlamak için ihtiyacın olan bağlantı linki $email '
+                'adresine gönderildi',
+            btnOkOnPress: () {},
+            btnOkIcon: Icons.check_circle,
+          ).show();
+        } else {
+          AwesomeDialog(
+            context: context,
+            animType: AnimType.LEFTSLIDE,
+            headerAnimationLoop: false,
+            dialogType: DialogType.WARNING,
+            showCloseIcon: true,
+            title: 'Şifre Sıfırlama Mailı Gönderilemedi 😕',
+            desc: 'Şifre sıfırlama mailı gönderilirken bir sorun oluştu.\n'
+                'İnternet bağlantınızı kontrol edin',
+            btnOkOnPress: () {},
+            btnOkText: "Tamam",
+            btnOkIcon: Icons.check_circle,
+          ).show();
+        }
+      } catch (e) {
+        AwesomeDialog(
+          context: context,
+          animType: AnimType.LEFTSLIDE,
+          headerAnimationLoop: false,
+          dialogType: DialogType.WARNING,
+          showCloseIcon: true,
+          title: 'Şifre Sıfırlama Maili HATA',
+          desc: 'Lütfen internet bağlantınızı kontrol edin',
+          btnOkOnPress: () {},
+          btnOkText: "Tamam",
+          btnOkIcon: Icons.check_circle,
+        ).show();
+      }
+    }
   }
 }
