@@ -1,3 +1,4 @@
+import 'package:pigeon_pedigre/models/pigeon.dart';
 import 'package:pigeon_pedigre/models/user_info.dart';
 import 'package:pigeon_pedigre/services/auth_base.dart';
 import 'package:pigeon_pedigre/services/firebase/firebase_auth_service.dart';
@@ -56,5 +57,9 @@ class UserRepository implements AuthBase {
   @override
   Future<bool> signOut() async {
     return await _firebaseAuthService.signOut();
+  }
+
+  Future<List<Pigeon>> getPigeons() async {
+    return await _firestoreService.getPigeons();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:pigeon_pedigre/models/pigeon.dart';
 import 'package:pigeon_pedigre/models/user_info.dart';
 import 'package:pigeon_pedigre/repository/user_repository.dart';
 import 'package:pigeon_pedigre/services/auth_base.dart';
@@ -27,7 +28,7 @@ class UserModel with ChangeNotifier implements AuthBase {
           name, surname, email, password);
       return userInfo;
     } catch (e) {
-      print("userModel hata: " + e.toString());
+      printError("createUserWithEmailandPassword", e);
       rethrow;
     } finally {
       state = ViewState.idle;
@@ -46,7 +47,7 @@ class UserModel with ChangeNotifier implements AuthBase {
         return null;
       }
     } catch (e) {
-      print("UserModel currentUser hata: " + e.toString());
+      printError("currentUser", e);
       return null;
     } finally {
       state = ViewState.idle;
@@ -59,7 +60,7 @@ class UserModel with ChangeNotifier implements AuthBase {
       bool sonuc = await userRepository.sendPasswordResetEmail(email);
       return sonuc;
     } catch (e) {
-      print("user_model hata: " + e.toString());
+      printError("sendPasswordResetEmail", e);
       rethrow;
     }
   }
@@ -77,7 +78,7 @@ class UserModel with ChangeNotifier implements AuthBase {
         return null;
       }
     } catch (e) {
-      print("userModel hata: " + e.toString());
+      printError("signInWithEmailandPassword", e);
       rethrow;
     }
   }
@@ -92,11 +93,24 @@ class UserModel with ChangeNotifier implements AuthBase {
       }
       return sonuc;
     } catch (e) {
-      print("Viewmodeldeki signOut hata: " + e.toString());
+      printError("signOut", e);
       return false;
     } finally {
       state = ViewState.idle;
     }
+  }
+
+  Future<List<Pigeon>> getPigeons() async {
+    try {
+      return await userRepository.getPigeons();
+    } catch (e) {
+      printError("getPigeons", e);
+      return [];
+    }
+  }
+
+  void printError(String methodName, Object e) {
+    print("Usermodel $methodName hata: " + e.toString());
   }
 
   UserInfoC? get userC => _userC;
