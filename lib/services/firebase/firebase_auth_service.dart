@@ -18,9 +18,22 @@ class FirebaseAuthService implements AuthBase {
   }
 
   @override
-  Future<UserInfoC> currentUser() {
-    // TODO: implement currentUser
-    throw UnimplementedError();
+  Future<UserInfoC?> currentUser() {
+    try {
+      User? user = _firebaseAuth.currentUser;
+      return Future.value(_userFromFirebase(user));
+    } catch (e) {
+      print("Firebase HATA CURRENT USER: " + e.toString());
+      return Future.value(null);
+    }
+  }
+
+  UserInfoC? _userFromFirebase(User? user) {
+    if (user == null) {
+      return null;
+    } else {
+      return UserInfoC(id: user.uid, mail: user.email, name: user.displayName);
+    }
   }
 
   @override
