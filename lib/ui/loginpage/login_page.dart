@@ -1,13 +1,16 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:pigeon_pedigre/models/user_info.dart';
 import 'package:pigeon_pedigre/ui/clipper.dart';
 import 'package:pigeon_pedigre/viewmodel/user_model.dart';
 import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';
 import 'package:provider/provider.dart';
 
+import '../../app/exceptions.dart';
 import '../../const.dart';
 import '../../services/validator.dart';
+import '../homepage/home_page.dart';
 import '../registerpage/registerpage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -84,6 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                               size: 22,
                             ),
                             labelText: "Şifre"),
+                        validator: Validator.passwordControl,
                         onSaved: (String? value) => password = value,
                       ),
                     ),
@@ -128,7 +132,25 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             color: Colors.green.shade400)
                       },
-                      onPressed: () {},
+                      onPressed: () {
+                        switch (buttonState) {
+                          case ButtonState.idle:
+                            buttonState = ButtonState.loading;
+                            signInWithEmailandPassword(context);
+                            break;
+                          case ButtonState.loading:
+                            break;
+                          case ButtonState.success:
+                            buttonState = ButtonState.idle;
+                            break;
+                          default:
+                            buttonState = ButtonState.idle;
+                            break;
+                        }
+                        setState(() {
+                          buttonState = buttonState;
+                        });
+                      },
                     ),
                     SizedBox(
                       width: size.width,
@@ -232,5 +254,64 @@ class _LoginPageState extends State<LoginPage> {
         ).show();
       }
     }
+  }
+
+  Future signInWithEmailandPassword(BuildContext context) async {
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+
+      try {
+        UserInfoC? userInfoC =
+            await _userModel.signInWithEmailandPassword(email!, password!);
+        if (userInfoC != null) {
+          setState(() {
+            buttonState = ButtonState.success;
+          });
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const HomePage()));
+        } else {
+          changeButtonStateFailtoIdle();
+          AwesomeDialog(
+            context: context,
+            animType: AnimType.LEFTSLIDE,
+            headerAnimationLoop: false,
+            dialogType: DialogType.WARNING,
+            showCloseIcon: true,
+            title: 'Kullanıcı Onaylı Değil',
+            desc:
+                'Lütfen e-mail adresinize gönderilen aktivasyon mailini onaylayınız',
+            btnOkOnPress: () {},
+            btnOkText: "Tamam",
+            btnOkIcon: Icons.check_circle,
+          ).show();
+        }
+      } catch (e) {
+        changeButtonStateFailtoIdle();
+        AwesomeDialog(
+                context: context,
+                dialogType: DialogType.ERROR,
+                animType: AnimType.RIGHSLIDE,
+                headerAnimationLoop: true,
+                title: 'Hay Aksi!',
+                desc: Exceptions.goster(e.toString()),
+                btnOkOnPress: () {},
+                btnOkText: "Tamam",
+                btnOkIcon: Icons.cancel,
+                btnOkColor: Colors.red)
+            .show();
+      }
+    } else {
+      changeButtonStateFailtoIdle();
+    }
+  }
+
+  Future changeButtonStateFailtoIdle() async {
+    setState(() {
+      buttonState = ButtonState.fail;
+    });
+    await Future.delayed(const Duration(seconds: 3));
+    setState(() {
+      buttonState = ButtonState.idle;
+    });
   }
 }

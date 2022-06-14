@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pigeon_pedigre/ui/homepage/home_page.dart';
 import 'package:pigeon_pedigre/viewmodel/user_model.dart';
 import 'package:provider/provider.dart';
 
@@ -14,11 +15,7 @@ class LandingPage extends StatelessWidget {
       if (_userModel.userC == null) {
         return const LoginPage();
       } else {
-        return const Scaffold(
-          body: Center(
-            child: Text("Home Page"),
-          ),
-        );
+        return const HomePage();
       }
     } else {
       const Scaffold(

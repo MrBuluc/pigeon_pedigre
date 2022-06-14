@@ -65,9 +65,21 @@ class UserModel with ChangeNotifier implements AuthBase {
   }
 
   @override
-  Future<UserInfoC> signInWithEmailandPassword(String email, String password) {
-    // TODO: implement signInWithEmailandPassword
-    throw UnimplementedError();
+  Future<UserInfoC?> signInWithEmailandPassword(
+      String email, String password) async {
+    try {
+      UserInfoC? userInfoC =
+          await userRepository.signInWithEmailandPassword(email, password);
+      if (userInfoC != null) {
+        _userC = userInfoC;
+        return _userC;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print("userModel hata: " + e.toString());
+      rethrow;
+    }
   }
 
   @override
