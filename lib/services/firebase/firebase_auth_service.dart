@@ -56,8 +56,13 @@ class FirebaseAuthService implements AuthBase {
   }
 
   @override
-  Future<bool> signOut() {
-    // TODO: implement signOut
-    throw UnimplementedError();
+  Future<bool> signOut() async {
+    try {
+      await _firebaseAuth.signOut();
+      return true;
+    } catch (e) {
+      print("Firebase sign out hata: " + e.toString());
+      return false;
+    }
   }
 }

@@ -83,9 +83,20 @@ class UserModel with ChangeNotifier implements AuthBase {
   }
 
   @override
-  Future<bool> signOut() {
-    // TODO: implement signOut
-    throw UnimplementedError();
+  Future<bool> signOut() async {
+    try {
+      state = ViewState.busy;
+      bool sonuc = await userRepository.signOut();
+      if (sonuc) {
+        _userC = null;
+      }
+      return sonuc;
+    } catch (e) {
+      print("Viewmodeldeki signOut hata: " + e.toString());
+      return false;
+    } finally {
+      state = ViewState.idle;
+    }
   }
 
   UserInfoC? get userC => _userC;

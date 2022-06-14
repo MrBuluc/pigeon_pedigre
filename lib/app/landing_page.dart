@@ -18,12 +18,11 @@ class LandingPage extends StatelessWidget {
         return const HomePage();
       }
     } else {
-      const Scaffold(
+      return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
         ),
       );
     }
-    return const CircularProgressIndicator();
   }
 }
