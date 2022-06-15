@@ -41,4 +41,11 @@ class Validator {
     }
     return null;
   }
+
+  static String? nullControl(String? value) {
+    if (value!.isEmpty) {
+      return "You should enter a value";
+    }
+    return null;
+  }
 }

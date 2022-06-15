@@ -109,6 +109,15 @@ class UserModel with ChangeNotifier implements AuthBase {
     }
   }
 
+  Future<bool> addPigeon(Pigeon pigeon) async {
+    try {
+      return await userRepository.addPigeon(pigeon);
+    } catch (e) {
+      printError("addPigeon", e);
+      rethrow;
+    }
+  }
+
   void printError(String methodName, Object e) {
     print("Usermodel $methodName hata: " + e.toString());
   }

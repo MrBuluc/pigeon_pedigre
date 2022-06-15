@@ -22,7 +22,7 @@ class FirestoreService {
       await usersRef.doc(userInfoC.id).set(userInfoC);
       return true;
     } catch (e) {
-      print("db setUser hata: " + e.toString());
+      printError("setUser", e);
       return false;
     }
   }
@@ -43,5 +43,19 @@ class FirestoreService {
       pigeons.add(queryDocumentSnapshot.data());
     }
     return pigeons;
+  }
+
+  Future<bool> addPigeon(Pigeon pigeon) async {
+    try {
+      await pigeonsRef.doc(pigeon.id).set(pigeon);
+      return true;
+    } catch (e) {
+      printError("addPigeon", e);
+      return false;
+    }
+  }
+
+  void printError(String methodName, Object? e) {
+    print("db $methodName hata: " + e.toString());
   }
 }
