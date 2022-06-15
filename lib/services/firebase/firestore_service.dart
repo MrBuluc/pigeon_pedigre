@@ -58,4 +58,9 @@ class FirestoreService {
   void printError(String methodName, Object? e) {
     print("db $methodName hata: " + e.toString());
   }
+
+  Future<Pigeon?> getPigeon(String id) async {
+    return (await pigeonsRef.doc(id).get().then((snapshot) => snapshot.data()!))
+        as Pigeon;
+  }
 }

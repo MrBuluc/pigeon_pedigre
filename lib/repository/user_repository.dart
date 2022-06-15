@@ -66,4 +66,8 @@ class UserRepository implements AuthBase {
   Future<bool> addPigeon(Pigeon pigeon) async {
     return await _firestoreService.addPigeon(pigeon);
   }
+
+  Future<Pigeon?> getPigeon(String id) async {
+    return await _firestoreService.getPigeon(id);
+  }
 }

@@ -1,5 +1,8 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:pigeon_pedigre/models/pigeon.dart';
+import 'package:pigeon_pedigre/viewmodel/user_model.dart';
+import 'package:provider/provider.dart';
 
 class DetailPage extends StatefulWidget {
   final Pigeon pigeon;
@@ -92,6 +95,29 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Future goToDetailPage(String id) async {
-    if (id != pigeon.id) {}
+    if (id != pigeon.id) {
+      UserModel userModel = Provider.of<UserModel>(context, listen: false);
+      Pigeon? parentPigeon = await userModel.getPigeon(id);
+      if (parentPigeon != null) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DetailPage(pigeon: parentPigeon)));
+      } else {
+        AwesomeDialog(
+                context: context,
+                dialogType: DialogType.ERROR,
+                animType: AnimType.RIGHSLIDE,
+                headerAnimationLoop: true,
+                title: 'Pigeon Not Found!',
+                desc:
+                    'You are trying to reach the family of a pigeon that is not in our system.\n'
+                    'You can add if you want.',
+                btnOkOnPress: () {},
+                btnOkText: "Ok",
+                btnOkColor: Colors.blue)
+            .show();
+      }
+    }
   }
 }
